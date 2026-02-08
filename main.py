@@ -1,15 +1,3 @@
-1️⃣ One-time setup in Snowflake (run once)
--- Sequence for TXN_ID
-CREATE OR REPLACE SEQUENCE TXN_SEQ
-START = 1
-INCREMENT = 1;
-
--- Optional helper view to format TXN_ID like TXN001
--- (we’ll format in Python, but this is for reference)
-
-======================================================================
-2️⃣ Streamlit App: bank_app.py
-
 import streamlit as st
 import snowflake.connector
 from datetime import datetime
@@ -27,6 +15,7 @@ def get_snowflake_connection():
         database="MULEACCOUNT",
         schema="PUBLIC"
     )
+
 # -----------------------------
 # Fetch Account IDs
 # -----------------------------
@@ -47,8 +36,33 @@ def generate_txn_id(conn):
     return f"TXN{str(seq_val).zfill(3)}"
 
 # -----------------------------
+# Account balance check
+# -----------------------------
+def get_account_balance(conn, account_id):
+    cur = conn.cursor()
+
+    balance_sql = """
+    SELECT
+        COALESCE(SUM(
+            CASE 
+                WHEN TXN_TYPE = 'CREDIT' THEN AMOUNT
+                WHEN TXN_TYPE = 'DEBIT' THEN -AMOUNT
+            END
+        ), 0) AS BALANCE
+    FROM TRANSACTIONS
+    WHERE ACCOUNT_ID = %s
+    """
+
+    cur.execute(balance_sql, (account_id,))
+    balance = cur.fetchone()[0]
+
+    return balance
+
+# -----------------------------
 # Insert Transaction
 # -----------------------------
+from datetime import datetime
+
 def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
     cur = conn.cursor()
 
@@ -71,14 +85,15 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
         (
             txn_id,
             account_id,
-            datetime.now(),
+            datetime.now(),     -- ✅ TXN_TS (current time)
             txn_type,
             amount,
             channel,
-            "DEFAULT",        -- DEVICE_ID
-            "127.0.0.1"       -- IP_ADDRESS (localhost)
+            "DEFAULT",          -- DEVICE_ID
+            "127.0.0.1"         -- IP_ADDRESS
         )
     )
+
     conn.commit()
 
 # -----------------------------
@@ -183,29 +198,3 @@ if submit:
             st.success("✅ Transaction Successful")
             st.info(f"Transaction ID: **{txn_id}**")
             st.info(f"Updated Balance: ₹{current_balance + (amount_value if txn_type == 'CREDIT' else -amount_value):.2f}")
-
-===========================================
-
-1️⃣ Function to calculate account balance
-
-Add this function to your app:
-
-def get_account_balance(conn, account_id):
-    cur = conn.cursor()
-
-    balance_sql = """
-    SELECT
-        COALESCE(SUM(
-            CASE 
-                WHEN TXN_TYPE = 'CREDIT' THEN AMOUNT
-                WHEN TXN_TYPE = 'DEBIT' THEN -AMOUNT
-            END
-        ), 0) AS BALANCE
-    FROM TRANSACTIONS
-    WHERE ACCOUNT_ID = %s
-    """
-
-    cur.execute(balance_sql, (account_id,))
-    balance = cur.fetchone()[0]
-
-    return balance
