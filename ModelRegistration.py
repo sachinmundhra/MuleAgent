@@ -21,6 +21,7 @@ import joblib
 import os
 
 from snowflake.snowpark import Session
+import Session as session
 from snowflake.snowpark.context import get_active_session
 
 from sklearn.ensemble import RandomForestClassifier
