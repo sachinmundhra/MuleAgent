@@ -55,20 +55,13 @@ st.title("📦 Model Registration in Snowflake")
 import streamlit as st
 import snowflake.connector
 
-# Use st.connection for a robust, cached connection
-conn = st.connection("snowflake")
+session = get_connection()
 
-# Example of using the connection
-# cursor = conn.cursor() 
-# cursor.execute("SELECT current_version()")
-# my_version = cursor.fetchone()
-# st.write(f"My Snowflake version: {my_version}")
+if session:
+    st.error("Connection done")
+else:
+    st.error("Could not connect")
 
-
-# -------------------------------------------------------------------
-# Get active Snowflake session (Streamlit in Snowflake)
-# -------------------------------------------------------------------
-session = conn
 
 
 
