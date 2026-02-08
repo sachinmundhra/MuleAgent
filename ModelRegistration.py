@@ -54,20 +54,17 @@ def get_connection():
 st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
 st.title("📦 Model Registration in Snowflake")
 
-import streamlit as st
-import snowflake.connector
 
-conn = get_connection()
+import streamlit as st
+
+# Initialize Snowflake connection
+conn = st.connection("snowflake")
 session = conn.session()
 
-if session:
-    st.error("Connection done")
-else:
-    st.error("Could not connect")
+# Use limit to avoid loading excessive data
+df = session.table("FEATURE_STORE").limit(1000).to_pandas()
+st.dataframe(df)
 
-#cur = session.cursor()
-#df = cur.query("SELECT * FROM TRANSACTIONS")
-df = session.table("FEATURE_STORE").to_pandas()
 
 
 
