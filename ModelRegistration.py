@@ -48,8 +48,8 @@ SNOWFLAKE_CONFIG = {
     "schema": "PUBLIC",
 }
 
-def get_connection():
-    return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+#def get_connection():
+#    return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
 
 st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
 st.title("📦 Model Registration in Snowflake")
@@ -62,8 +62,8 @@ conn = st.connection("snowflake")
 session = conn.session()
 
 # Use limit to avoid loading excessive data
-df = session.table("FEATURE_STORE").limit(1000).to_pandas()
-st.dataframe(df)
+#df = session.table("FEATURE_STORE").limit(1000).to_pandas()
+#st.dataframe(df)
 
 
 
