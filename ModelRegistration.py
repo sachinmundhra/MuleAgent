@@ -58,7 +58,7 @@ session = get_connection()
 
 if session:
     df = sesson.table("PUBLIC.FEATURE_STORE").to_pandas()
-else
+else:
     st.error("Transaction ID and Account ID are mandatory")
 
 
