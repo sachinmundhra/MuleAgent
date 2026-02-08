@@ -81,11 +81,11 @@ df["ANOMALY_SCORE"] = model.fit_predict(df[feature_cols])
 
     
     # Return value will appear in the Results tab.
- joblib.dump(model, "/tmp/mule_model.joblib")
- session.file.put(
+joblib.dump(model, "/tmp/mule_model.joblib")
+session.file.put(
       "/tmp/mule_model.joblib",
        "@MULE",
        overwrite=True
-  )
+)
    
 
