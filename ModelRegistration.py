@@ -21,7 +21,7 @@ import joblib
 import os
 
 from snowflake.snowpark import Session
-import Session as session
+#import Session as session
 from snowflake.snowpark.context import get_active_session
 
 from sklearn.ensemble import RandomForestClassifier
@@ -56,6 +56,8 @@ st.title("📦 Model Registration in Snowflake")
 # Get active Snowflake session (Streamlit in Snowflake)
 # -------------------------------------------------------------------
 session = get_connection()
+
+session = get_active_session() 
 
 if session:
     df = sesson.table("PUBLIC.FEATURE_STORE").to_pandas()
