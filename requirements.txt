@@ -2,3 +2,9 @@
 snowflake-snowpark-python
 streamlit
 requests
+snowflake-snowpark-python
+snowflake-ml-python
+scikit-learn
+pandas
+joblib
+
