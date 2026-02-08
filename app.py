@@ -9,10 +9,10 @@ from datetime import datetime
 # Snowflake Connection Config
 # ----------------------------------
 SNOWFLAKE_CONFIG = {
-    "user": "SACHINMUNDHRA",
-    "password": "MuleAccount@0803",
-    "account": "YOB34856",
-    "warehouse": "COMPUTE_WH",
+    "user": "ACME_ADMIN",
+    "password": "MarolNaka@0803",
+    "account": "QNGYAPF-ACME",
+    "warehouse": "ACME_WH",
     "database": "MULEACCOUNT",
     "schema": "PUBLIC",
 }
@@ -22,12 +22,12 @@ SNOWFLAKE_CONFIG = {
 # -----------------------------
 def get_connection():
     return snowflake.connector.connect(
-        user="SACHINMUNDHRA",
-        password="MuleAccount@0803",
-        account="YOB34856",
-        warehouse="COMPUTE_WH",
-        database="MULEACCOUNT",
-        schema="PUBLIC"
+        "user": "ACME_ADMIN",
+        "password": "MarolNaka@0803",
+        "account": "QNGYAPF-ACME",
+        "warehouse": "ACME_WH",
+        "database": "MULEACCOUNT",
+        "schema": "PUBLIC"
     )
 
 
