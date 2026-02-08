@@ -85,12 +85,12 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
         (
             txn_id,
             account_id,
-            datetime.now(),     -- ✅ TXN_TS (current time)
+            datetime.now(),     
             txn_type,
             amount,
             channel,
-            "DEFAULT",          -- DEVICE_ID
-            "127.0.0.1"         -- IP_ADDRESS
+            "DEFAULT",          
+            "127.0.0.1"        
         )
     )
 
