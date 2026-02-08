@@ -64,7 +64,7 @@ if session:
 else:
     st.error("Could not connect")
 
-cur = conn.cursor()
+cur = session.cursor()
 df = cur.query("SELECT * FROM TRANSACTIONS")
 
 
