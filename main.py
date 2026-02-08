@@ -195,6 +195,10 @@ if submit:
                 channel
             )
 
-            st.success("✅ Transaction Successful")
-            st.info(f"Transaction ID: **{txn_id}**")
-            st.info(f"Updated Balance: ₹{current_balance + (amount_value if txn_type == 'CREDIT' else -amount_value):.2f}")
+        st.success("✅ Transaction Successful")
+        st.info(f"Transaction ID: **{txn_id}**")
+        st.info(f"Updated Balance: ₹{current_balance + (amount_value if txn_type == 'CREDIT' else -amount_value):.2f}")
+
+except Exception as e:
+    st.error("❌ Error connecting to Snowflake")
+    st.code(str(e))
