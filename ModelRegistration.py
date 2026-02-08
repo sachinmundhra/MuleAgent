@@ -66,6 +66,7 @@ else:
 
 cur = session.cursor()
 #df = cur.query("SELECT * FROM TRANSACTIONS")
+df = cur.table("FEATURE_STORE").to_pandas()
 
 
 
