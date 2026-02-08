@@ -6,12 +6,12 @@ from datetime import datetime
 # Snowflake Connection Config
 # ----------------------------------
 SNOWFLAKE_CONFIG = {
-    "user": "YOUR_USER",
-    "password": "YOUR_PASSWORD",
-    "account": "YOUR_ACCOUNT",
-    "warehouse": "YOUR_WAREHOUSE",
-    "database": "YOUR_DATABASE",
-    "schema": "YOUR_SCHEMA",
+    "user": "SACHINMUNDHRA",
+    "password": "MuleAccount@0803",
+    "account": "YOB34856",
+    "warehouse": "COMPUTE_WH",
+    "database": "MULEACCOUNT",
+    "schema": "PUBLIC",
 }
 
 def get_connection():
