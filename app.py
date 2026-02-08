@@ -2,7 +2,6 @@ import streamlit as st
 import uuid
 import snowflake.connector
 from datetime import datetime
-from datetime import datetime
 
 
 # ----------------------------------
@@ -17,22 +16,8 @@ SNOWFLAKE_CONFIG = {
     "schema": "PUBLIC",
 }
 
-# -----------------------------
-# Snowflake Connection
-# -----------------------------
 def get_connection():
-    return snowflake.connector.connect(
-        "user": "ACME_ADMIN",
-        "password": "MarolNaka@0803",
-        "account": "QNGYAPF-ACME",
-        "warehouse": "ACME_WH",
-        "database": "MULEACCOUNT",
-        "schema": "PUBLIC"
-    )
-
-
-#def get_connection():
- #   return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+    return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
 
 # ----------------------------------
 # Streamlit UI
