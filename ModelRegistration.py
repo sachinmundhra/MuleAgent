@@ -1,75 +1,101 @@
+# Import python packages
 import streamlit as st
-import pandas as pd
-import joblib
-
 from snowflake.snowpark.context import get_active_session
-from snowflake.ml.registry import Registry
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from snowflake.ml.registry import Registry
+import snowflake.snowpark as snowpark
+from snowflake.snowpark.functions import col
+from snowflake.snowpark import Session
+from sklearn.ensemble import IsolationForest
+
+import streamlit as st
+
+st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color: #29B5E8;   /* Snowflake blue */
+    color: white;
+    border-radius: 8px;
+    height: 45px;
+    width: 200px;
+    font-size: 16px;
+    font-weight: bold;
+}
+div.stButton > button:first-child:hover {
+    background-color: #1F8FBF;
+    color: white;
+}
+</style>
+""", unsafe_allow_html=True)
+
+#if st.button("Register Model"):
+#    st.success("Model registered successfully!")
 
 
-# -------------------------------------------------
-# Streamlit UI
-# -------------------------------------------------
-st.title("📦 Snowflake Model Registration")
+st.title("Detect Mule Accounts ")
 
-st.write("Train and register a model in Snowflake Model Registry")
+st.write("Register a Machine Learning Model")
 
-# -------------------------------------------------
-# Snowflake Session
-# -------------------------------------------------
+# Get the current credentials
 session = get_active_session()
 
-# -------------------------------------------------
-# Sample Training Data
-# -------------------------------------------------
-data = pd.DataFrame({
-    "age": [22, 35, 45, 52, 23, 40],
-    "txn_count": [5, 50, 200, 150, 10, 180],
-    "is_mule": [0, 0, 1, 1, 0, 1]
-})
+#st.title("Enter Model Name")
+txn_id = st.text_input("Enter Model Name")
 
-X = data[["age", "txn_count"]]
-y = data["is_mule"]
+df = session.table("FEATURE_STORE").to_pandas()
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.3, random_state=42
-)
+feature_cols = [
+        "TOTAL_TXNS",
+        "ACTIVE_DAYS",
+        "TOTAL_AMOUNT",
+        "TOTAL_CREDIT",
+        "TOTAL_DEBIT",
+        "FLOW_RATIO",
+        "UNIQUE_COUNTERPARTIES",
+        "DEVICE_COUNT",
+        "IP_COUNT",
+        "ACCOUNT_AGE_DAYS",
+        "LOW_KYC_FLAG"
+]
 
-# -------------------------------------------------
-# Train Model
-# -------------------------------------------------
-model = RandomForestClassifier(
-    n_estimators=50,
-    random_state=42
-)
-model.fit(X_train, y_train)
 
-# -------------------------------------------------
-# Register Model Button
-# -------------------------------------------------
-if st.button("🚀 Register Model"):
-    registry = Registry(
-        session=session,
-        database_name="ML_DB",
-        schema_name="ML_SCHEMA"
+if st.button("Train & Register Model"):
+    # Train model
+
+    model = IsolationForest(
+        n_estimators=200,
+        contamination=0.02,
+        random_state=42
+    )
+    df["ANOMALY_SCORE"] = model.fit_predict(df[feature_cols])
+
+    import os
+    import joblib
+
+    #output_dir = 'd://Maven//my_model_directory'
+    #if not os.path.exists(output_dir):
+    #    os.makedirs(output_dir) # Creates the directory and any necessary intermediate directories
+
+    
+    # Return value will appear in the Results tab.
+    joblib.dump(model, "/tmp/mule_model.joblib")
+    session.file.put(
+        "/tmp/mule_model.joblib",
+        "@MULE",
+        overwrite=True
     )
 
-    model_name = "MULE_ACCOUNT_RF"
+    
+    #model = "your_model_object" # Replace with your actual model
+    #filename = os.path.join(output_dir, 'model.joblib')
+    #joblib.dump(model, filename)
 
-    registry.log_model(
-        model,
-        model_name=model_name,
-        version_name="v1",
-        sample_input_data=X_train,
-        comment="RandomForest model for Mule Account Detection",
-        tags={
-            "domain": "fraud",
-            "use_case": "mule_account",
-            "algo": "random_forest"
-        }
-    )
+    
+    #MULEACCOUNT.PUBLIC.MULE
+    
+    #return dataframe
 
-    st.success(f"✅ Model `{model_name}` registered successfully!")
+    
+    st.success("🚀 Model registered in Snowflake Model Registry!")
+    #st.write(mv)
+
+
+
