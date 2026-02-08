@@ -6,6 +6,9 @@ from snowflake.snowpark.context import get_active_session
 from snowflake.ml.registry import Registry
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from snowflake.ml.registry import Registry
+
 
 # -------------------------------------------------
 # Streamlit UI
