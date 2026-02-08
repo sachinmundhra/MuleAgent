@@ -30,8 +30,23 @@ from snowflake.ml.registry import Registry
 
 
 # Use st.connection() to manage the Snowflake session
-conn = st.connection("snowflake")
-session = conn.session()
+#conn = st.connection("snowflake")
+#session = conn.session()
+
+# ----------------------------------
+# Snowflake Connection Config
+# ----------------------------------
+SNOWFLAKE_CONFIG = {
+    "user": "ACME_ADMIN",
+    "password": "MarolNaka@0803",
+    "account": "QNGYAPF-ACME",
+    "warehouse": "ACME_WH",
+    "database": "MULEACCOUNT",
+    "schema": "PUBLIC",
+}
+
+def get_connection():
+    return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
 
 st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
 st.title("📦 Model Registration in Snowflake")
