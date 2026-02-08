@@ -70,9 +70,6 @@ conn = st.connection("snowflake")
 # -------------------------------------------------------------------
 session = conn
 
-if session:
-    df = sesson.table("PUBLIC.FEATURE_STORE").to_pandas()
-else:
-    st.error("Transaction ID and Account ID are mandatory")
+
 
 
