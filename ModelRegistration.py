@@ -34,5 +34,5 @@ st.title("📦 Model Registration in Snowflake")
 # -------------------------------------------------------------------
 # Get active Snowflake session (Streamlit in Snowflake)
 # -------------------------------------------------------------------
-session = get_active_session()
+#session = get_active_session()
 
