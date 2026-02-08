@@ -163,42 +163,25 @@ try:
     # -----------------------------
     # Validation + Submit Logic
     # -----------------------------
-if submit:
-    if not amount:
-        st.error("❌ Amount is required")
-
-    elif not re.match(r"^\d+(\.\d{1,2})?$", amount):
-        st.error("❌ Amount must be numeric (up to 2 decimal places)")
-
-    else:
-        amount_value = float(amount)
-
-        # Fetch balance
-        current_balance = get_account_balance(conn, account_id)
-
-        # Debit validation
-        if txn_type == "DEBIT" and amount_value > current_balance:
-            st.error(
-                f"❌ Insufficient Balance\n\n"
-                f"Available Balance: ₹{current_balance:.2f}"
-            )
-
+    if submit:
+        if not amount:
+            st.error("❌ Amount is required")
+        elif not re.match(r"^\d+(\.\d{1,2})?$", amount):
+            st.error("❌ Amount must be numeric (up to 2 decimal places)")
         else:
             txn_id = generate_txn_id(conn)
-
             insert_transaction(
                 conn,
                 txn_id,
                 account_id,
                 txn_type,
-                amount_value,
+                float(amount),
                 channel
             )
-
-        st.success("✅ Transaction Successful")
-        st.info(f"Transaction ID: **{txn_id}**")
-        st.info(f"Updated Balance: ₹{current_balance + (amount_value if txn_type == 'CREDIT' else -amount_value):.2f}")
-
+ 
+            st.success(f"✅ Transaction Successful!")
+            st.info(f"Generated Transaction ID: **{txn_id}**")
+ 
 except Exception as e:
     st.error("❌ Error connecting to Snowflake")
     st.code(str(e))
