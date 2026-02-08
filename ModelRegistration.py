@@ -56,6 +56,6 @@ st.title("📦 Model Registration in Snowflake")
 # -------------------------------------------------------------------
 session = get_connection()
 
-df = session.table("FEATURE_STORE").to_pandas()
+df = session.table("MULEACCOUNT.PUBLIC.FEATURE_STORE").to_pandas()
 
 
