@@ -1,72 +1,72 @@
-
-
-import streamlit as st
-import uuid
-import snowflake.connector
-from datetime import datetime
-import os
-import joblib
-import snowflake.snowpark as snowpark
-from snowflake.snowpark.functions import col
-from snowflake.snowpark.functions import col
-from snowflake.snowpark import Session
-from sklearn.ensemble import IsolationForest
-# ----------------------------------
-# Streamlit UI
-# ----------------------------------
-#st.set_page_config(page_title="Transaction Ingestion", layout="centered")
-#st.title("Model Registration")
-
 import streamlit as st
 import pandas as pd
 import joblib
-import os
 
-from snowflake.snowpark import Session
-#import Session as session
 from snowflake.snowpark.context import get_active_session
-
+from snowflake.ml.registry import Registry
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-from snowflake.ml.registry import Registry
+# -------------------------------------------------
+# Streamlit UI
+# -------------------------------------------------
+st.title("📦 Snowflake Model Registration")
 
+st.write("Train and register a model in Snowflake Model Registry")
 
-# Use st.connection() to manage the Snowflake session
-#conn = st.connection("snowflake")
-#session = conn.session()
+# -------------------------------------------------
+# Snowflake Session
+# -------------------------------------------------
+session = get_active_session()
 
-# ----------------------------------
-# Snowflake Connection Config
-# ----------------------------------
-SNOWFLAKE_CONFIG = {
-    "user": "ACME_ADMIN",
-    "password": "MarolNaka@0803",
-    "account": "QNGYAPF-ACME",
-    "warehouse": "ACME_WH",
-    "database": "MULEACCOUNT",
-    "schema": "PUBLIC",
-}
+# -------------------------------------------------
+# Sample Training Data
+# -------------------------------------------------
+data = pd.DataFrame({
+    "age": [22, 35, 45, 52, 23, 40],
+    "txn_count": [5, 50, 200, 150, 10, 180],
+    "is_mule": [0, 0, 1, 1, 0, 1]
+})
 
-#def get_connection():
-#    return snowflake.connector.connect(**SNOWFLAKE_CONFIG)
+X = data[["age", "txn_count"]]
+y = data["is_mule"]
 
-st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
-st.title("📦 Model Registration in Snowflake")
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
 
+# -------------------------------------------------
+# Train Model
+# -------------------------------------------------
+model = RandomForestClassifier(
+    n_estimators=50,
+    random_state=42
+)
+model.fit(X_train, y_train)
 
-import streamlit as st
+# -------------------------------------------------
+# Register Model Button
+# -------------------------------------------------
+if st.button("🚀 Register Model"):
+    registry = Registry(
+        session=session,
+        database_name="ML_DB",
+        schema_name="ML_SCHEMA"
+    )
 
-# Initialize Snowflake connection
-conn = st.connection("snowflake")
-session = conn.session()
+    model_name = "MULE_ACCOUNT_RF"
 
-# Use limit to avoid loading excessive data
-#df = session.table("FEATURE_STORE").limit(1000).to_pandas()
-#st.dataframe(df)
+    registry.log_model(
+        model,
+        model_name=model_name,
+        version_name="v1",
+        sample_input_data=X_train,
+        comment="RandomForest model for Mule Account Detection",
+        tags={
+            "domain": "fraud",
+            "use_case": "mule_account",
+            "algo": "random_forest"
+        }
+    )
 
-
-
-
-
-
+    st.success(f"✅ Model `{model_name}` registered successfully!")
