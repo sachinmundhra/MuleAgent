@@ -28,6 +28,11 @@ from sklearn.model_selection import train_test_split
 
 from snowflake.ml.registry import Registry
 
+
+# Use st.connection() to manage the Snowflake session
+conn = st.connection("snowflake")
+session = conn.session()
+
 st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
 st.title("📦 Model Registration in Snowflake")
 
