@@ -57,14 +57,15 @@ st.title("📦 Model Registration in Snowflake")
 import streamlit as st
 import snowflake.connector
 
-session = get_connection()
+conn = get_connection()
+session = conn.session()
 
 if session:
     st.error("Connection done")
 else:
     st.error("Could not connect")
 
-cur = session.cursor()
+#cur = session.cursor()
 #df = cur.query("SELECT * FROM TRANSACTIONS")
 df = session.table("FEATURE_STORE").to_pandas()
 
