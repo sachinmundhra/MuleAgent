@@ -52,12 +52,23 @@ def get_connection():
 st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
 st.title("📦 Model Registration in Snowflake")
 
+import streamlit as st
+import snowflake.connector
+
+# Use st.connection for a robust, cached connection
+conn = st.connection("snowflake")
+
+# Example of using the connection
+# cursor = conn.cursor() 
+# cursor.execute("SELECT current_version()")
+# my_version = cursor.fetchone()
+# st.write(f"My Snowflake version: {my_version}")
+
+
 # -------------------------------------------------------------------
 # Get active Snowflake session (Streamlit in Snowflake)
 # -------------------------------------------------------------------
-session = get_connection()
-
-session = get_active_session() 
+session = conn
 
 if session:
     df = sesson.table("PUBLIC.FEATURE_STORE").to_pandas()
