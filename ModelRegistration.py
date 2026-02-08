@@ -12,5 +12,27 @@ from sklearn.ensemble import IsolationForest
 # ----------------------------------
 # Streamlit UI
 # ----------------------------------
-st.set_page_config(page_title="Transaction Ingestion", layout="centered")
-st.title("Model Registration")
+#st.set_page_config(page_title="Transaction Ingestion", layout="centered")
+#st.title("Model Registration")
+
+import streamlit as st
+import pandas as pd
+import joblib
+import os
+
+from snowflake.snowpark import Session
+from snowflake.snowpark.context import get_active_session
+
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+from snowflake.ml.registry import Registry
+
+st.set_page_config(page_title="Snowflake Model Registration", layout="wide")
+st.title("📦 Model Registration in Snowflake")
+
+# -------------------------------------------------------------------
+# Get active Snowflake session (Streamlit in Snowflake)
+# -------------------------------------------------------------------
+session = get_active_session()
+
