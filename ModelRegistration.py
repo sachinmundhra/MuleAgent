@@ -1,3 +1,5 @@
+
+
 import streamlit as st
 import uuid
 import snowflake.connector
@@ -61,6 +63,9 @@ if session:
     st.error("Connection done")
 else:
     st.error("Could not connect")
+
+cur = conn.cursor()
+df = cur.query("SELECT * FROM TRANSACTIONS")
 
 
 
