@@ -89,12 +89,13 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
             datetime.now(),     
             txn_type,
             amount,
-            "CPDEFAULT",
+            COUNTERPARTY_ID,
             channel,
-            "DEVICEDEFAULT",
-            "DEFAULT",          
+            device_id,       
             "127.0.0.1"        
         )
+        
+      
     )
 
     conn.commit()
@@ -156,11 +157,21 @@ try:
             placeholder="Enter numeric amount"
         )
 
+        sender_id = st.text_input(
+            "Sender ID",
+            placeholder="Enter Sender / Counterparty ID"
+        )
+        
         channel = st.selectbox(
             "Channel",
             options=["UPI", "IMPS", "NEFT"]
         )
 
+        device_id = st.selectbox(
+            "Device",
+            options=["DEVICE1", "DEVICE2", "DEVICE3"]
+        )
+        
         submit = st.form_submit_button("Submit")
 
     # -----------------------------
@@ -179,8 +190,10 @@ try:
                 account_id,
                 txn_type,
                 float(amount),
-                "CPDEFAULT",
-                channel
+                sender_id,
+                channel,
+                device_id
+               
             )
  
             st.success(f"✅ Transaction Successful!")
