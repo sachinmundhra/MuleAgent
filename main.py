@@ -10,7 +10,7 @@ st.markdown("""
     }
 div.stButton > button:first-child {
     background-color: #29B5E8;   /* Snowflake blue */
-    color: white;
+    color: black;
     border-radius: 8px;
     height: 45px;
     width: 200px;
