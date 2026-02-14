@@ -3,6 +3,12 @@ import snowflake.connector
 from datetime import datetime
 import re
 
+st.markdown("""
+<style>
+.stApp {
+        background-color: #e6f2ff;
+    }
+
 # -----------------------------
 # Snowflake Connection
 # -----------------------------
