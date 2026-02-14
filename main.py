@@ -118,7 +118,7 @@ def insert_transaction(conn, account_id, txn_type, amount, sender_id , channel, 
         IP_ADDRESS
     )
     SELECT
-        'TXN' || LPAD(MY_DB.PUBLIC.TXN_SEQ.NEXTVAL, 3, '0'),
+        'TXN' || LPAD(MULEACCOUNT.PUBLIC.TXN_SEQ.NEXTVAL, 3, '0'),
         %s,
         CURRENT_TIMESTAMP(),
         %s,
