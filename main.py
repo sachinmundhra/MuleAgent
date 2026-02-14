@@ -8,10 +8,10 @@ import re
 # -----------------------------
 def get_snowflake_connection():
     return snowflake.connector.connect(
-        user="ACME_ADMIN",
+        user="sachinmundhra",
         password="MarolNaka@0803",
-        account="QNGYAPF-ACME",
-        warehouse="ACME_WH",
+        account="QNGYAPF-YOB34856",
+        warehouse="COMPUTE_WH",
         database="MULEACCOUNT",
         schema="PUBLIC"
     )
@@ -128,7 +128,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="title">🏦 Laxmi Chit Fund</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">🏦 GREENS BANK</div>', unsafe_allow_html=True)
 
 # -----------------------------
 # Main Form
