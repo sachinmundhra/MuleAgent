@@ -10,6 +10,12 @@ st.markdown("""
     }
 
 </style>
+ <style>
+    html, body, [class*="css"]  {
+        color: black !important;
+ }
+</style>
+
 """, unsafe_allow_html=True)
 
 
