@@ -238,8 +238,8 @@ try:
                
             )
  
-            st.success(f"✅ Transaction Successful!")
-            st.info(f"Generated Transaction ID: **{txn_id}**")
+            st.success(f"✅ Transaction Completed Successfully")
+            #st.info(f"Generated Transaction ID: **{txn_id}**")
  
 except Exception as e:
     st.error("❌ Error connecting to Snowflake")
