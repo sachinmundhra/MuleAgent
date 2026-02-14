@@ -6,7 +6,7 @@ import re
 st.markdown("""
 <style>
 .stApp {
-        background-color: #e6f2ff;
+        background-color: #0B3D91;
     }
 
 </style>
