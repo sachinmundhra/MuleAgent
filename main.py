@@ -63,10 +63,49 @@ def get_account_balance(conn, account_id):
 # -----------------------------
 from datetime import datetime
 
-def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
+#def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
+#def insert_transaction(conn, account_id, txn_type, amount, sender_id , channel, device_id):
+#    cur = conn.cursor()
+#
+#    insert_sql = """
+#    INSERT INTO TRANSACTIONS (
+#        TXN_ID,
+#        ACCOUNT_ID,
+#        TXN_TS,
+#        TXN_TYPE,
+#        AMOUNT,
+#        COUNTERPARTY_ID,
+#        CHANNEL,
+#        DEVICE_ID,
+#        IP_ADDRESS
+ #   )
+ #   VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
+ #   """
+
+    #cur.execute(
+     #   insert_sql,
+     #   (
+     #       txn_id,
+     #       account_id,
+     #       datetime.now(),     
+     #       txn_type,
+     #       amount,
+     #       COUNTERPARTY_ID,
+     #       channel,
+     #       device_id,       
+     #       "127.0.0.1"        
+     #   )
+        
+      
+    #)
+
+    #conn.commit()
+
+
+def insert_transaction(conn, account_id, txn_type, amount, sender_id , channel, device_id):
     cur = conn.cursor()
 
-    insert_sql = """
+    sql = """
     INSERT INTO TRANSACTIONS (
         TXN_ID,
         ACCOUNT_ID,
@@ -78,27 +117,29 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
         DEVICE_ID,
         IP_ADDRESS
     )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
+    SELECT
+        'TXN' || LPAD(MY_DB.PUBLIC.TXN_SEQ.NEXTVAL, 3, '0'),
+        %s,
+        CURRENT_TIMESTAMP(),
+        %s,
+        %s,
+        %s,
+        %s,
+        %s,            -- DEVICE_ID from dropdown
+        '127.0.0.1'
     """
 
-    cur.execute(
-        insert_sql,
-        (
-            txn_id,
-            account_id,
-            datetime.now(),     
-            txn_type,
-            amount,
-            COUNTERPARTY_ID,
-            channel,
-            device_id,       
-            "127.0.0.1"        
-        )
-        
-      
-    )
+    cur.execute(sql, (
+        account_id,
+        txn_type,
+        amount,
+        sender_id,
+        channel,
+        device_id
+    ))
 
     conn.commit()
+
 
 # -----------------------------
 # Streamlit UI
@@ -184,6 +225,7 @@ try:
             st.error("❌ Amount must be numeric (up to 2 decimal places)")
         else:
             txn_id = generate_txn_id(conn)
+            #def insert_transaction(conn, txn_id , account_id, txn_type, amount, sender_id , channel, device_id):
             insert_transaction(
                 conn,
                 txn_id,
