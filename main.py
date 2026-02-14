@@ -103,7 +103,7 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
 # Streamlit UI
 # -----------------------------
 st.set_page_config(
-    page_title="Laxmi Chit Fund",
+    page_title="Green Bank",
     page_icon="🏦",
     layout="centered"
 )
@@ -179,6 +179,7 @@ try:
                 account_id,
                 txn_type,
                 float(amount),
+                "CPDEFAULT",
                 channel
             )
  
