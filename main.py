@@ -4,12 +4,12 @@ from datetime import datetime
 import re
 
 st.markdown("""
-<style>
-.stApp {
-        background-color: #0B3D91;
-    }
+#<style>
+#.stApp {
+  #      background-color: #0B3D91;
+   # }
 
-</style>
+#</style>
  <style>
     html, body, [class*="css"]  {
         color: black !important;
