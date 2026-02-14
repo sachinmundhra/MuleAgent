@@ -8,19 +8,7 @@ st.markdown("""
 .stApp {
         background-color: #e6f2ff;
     }
-div.stButton > button:first-child {
-    background-color: #29B5E8;   /* Snowflake blue */
-    color: black;
-    border-radius: 8px;
-    height: 45px;
-    width: 200px;
-    font-size: 16px;
-    font-weight: bold;
-}
-div.stButton > button:first-child:hover {
-    background-color: #1F8FBF;
-    color: white;
-}
+
 </style>
 """, unsafe_allow_html=True)
 
