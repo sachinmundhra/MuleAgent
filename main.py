@@ -228,7 +228,7 @@ try:
             #def insert_transaction(conn, txn_id , account_id, txn_type, amount, sender_id , channel, device_id):
             insert_transaction(
                 conn,
-                txn_id,
+                #txn_id,
                 account_id,
                 txn_type,
                 float(amount),
