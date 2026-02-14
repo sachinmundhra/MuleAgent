@@ -73,11 +73,12 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
         TXN_TS,
         TXN_TYPE,
         AMOUNT,
+        COUNTERPARTY_ID,
         CHANNEL,
         DEVICE_ID,
         IP_ADDRESS
     )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s,%s)
     """
 
     cur.execute(
@@ -88,7 +89,9 @@ def insert_transaction(conn, txn_id, account_id, txn_type, amount, channel):
             datetime.now(),     
             txn_type,
             amount,
+            "CPDEFAULT",
             channel,
+            "DEVICEDEFAULT",
             "DEFAULT",          
             "127.0.0.1"        
         )
