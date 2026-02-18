@@ -199,7 +199,7 @@ try:
         )
 
         sender_id = st.text_input(
-            "Sender ID",
+            "Sender / Receiver",
             placeholder="Enter Sender / Counterparty ID"
         )
         
