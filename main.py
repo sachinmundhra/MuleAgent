@@ -22,7 +22,7 @@ def get_snowflake_connection():
         user="ACME_ADMIN",
         password="MarolNaka@0803",
         account="QNGYAPF-ACME",
-        warehouse="COMPUTE_WH",
+        warehouse="ACME_WH",
         database="MULEACCOUNT",
         schema="PUBLIC"
     )
