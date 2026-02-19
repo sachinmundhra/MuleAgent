@@ -61,18 +61,14 @@ if st.button("Train & Register Model"):
     # Train model
 
     model = IsolationForest(
-        n_estimators=200,
-        contamination=0.02,
-        random_state=42
+        n_estimators=200, # No of Tress , value of 200 is ideal for banking frauds
+        contamination=0.02, # Used to define the anomaly threads 
+        random_state=42 
     )
     df["ANOMALY_SCORE"] = model.fit_predict(df[feature_cols])
 
     import os
     import joblib
-
-    #output_dir = 'd://Maven//my_model_directory'
-    #if not os.path.exists(output_dir):
-    #    os.makedirs(output_dir) # Creates the directory and any necessary intermediate directories
 
     
     # Return value will appear in the Results tab.
