@@ -6,26 +6,26 @@ import re
 # -----------------------------
 # Snowflake Connection
 # -----------------------------
-#def get_snowflake_connection():
- #   return snowflake.connector.connect(
-  #      user="sachinmundhra",
-   #     password="MarolNaka@0803",
-    #    account="QNGYAPF-YOB34856",
-     #   warehouse="COMPUTE_WH",
-      #  database="MULEACCOUNT",
-       # schema="PUBLIC"
-    #)
-
-
 def get_snowflake_connection():
     return snowflake.connector.connect(
-        user="ACME_ADMIN",
-        password="MarolNaka@0803",
-        account="QNGYAPF-ACME",
-        warehouse="ACME_WH",
-        database="MULEACCOUNT",
-        schema="PUBLIC"
+       user="sachinmundhra",
+       password="MarolNaka@0803",
+       account="QNGYAPF-YOB34856",
+       warehouse="COMPUTE_WH",
+       database="MULEACCOUNT",
+       schema="PUBLIC"
     )
+
+
+#def get_snowflake_connection():
+#    return snowflake.connector.connect(
+  #      user="ACME_ADMIN",
+  #      password="MarolNaka@0803",
+#        account="QNGYAPF-ACME",
+ #       warehouse="ACME_WH",
+ #       database="MULEACCOUNT",
+#        schema="PUBLIC"
+ #   )
 # -----------------------------
 # Fetch Account IDs
 # -----------------------------
