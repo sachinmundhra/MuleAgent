@@ -3,6 +3,7 @@ from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 import pandas as pd
 
+
 # -----------------------------------
 # PAGE CONFIG
 # -----------------------------------
@@ -119,16 +120,42 @@ if not sar_df.empty:
     )
 
     narrative_query = f"""
+    
     SELECT
-        ACCOUNT_ID,
-        'Account shows rapid inflow/outflow pattern with '
-        || TOTAL_TXNS || ' transactions totaling INR '
-        || TOTAL_AMOUNT ||
-        '. Multiple devices detected (' || DEVICE_COUNT ||
-        ') and high counterparty count (' || UNIQUE_COUNTERPARTIES || ').'
-        AS SAR_NARRATIVE
+    ACCOUNT_ID,
+
+    '--- Suspicious Activity Report Narrative --- ' || CHR(10) ||
+
+    '1. Account Overview:' || CHR(10) ||
+    '   • Account ID: ' || ACCOUNT_ID || CHR(10) ||
+    '   • Total Transactions Observed: ' || TOTAL_TXNS || CHR(10) ||
+    '   • Total Transaction Amount (USD): ' || TOTAL_AMOUNT || CHR(10) ||
+
+    CHR(10) ||
+    '2. Transaction Pattern Analysis:' || CHR(10) ||
+    '   • The account exhibits rapid inflow and outflow movement of funds.' || CHR(10) ||
+    '   • High transaction velocity detected over the monitoring period.' || CHR(10) ||
+
+    CHR(10) ||
+    '3. Device & Access Risk Indicators:' || CHR(10) ||
+    '   • Number of distinct devices used: ' || DEVICE_COUNT || CHR(10) ||
+    '   • This indicates potential account sharing or mule network behavior.' || CHR(10) ||
+
+    CHR(10) ||
+    '4. Counterparty Risk Indicators:' || CHR(10) ||
+    '   • Unique counterparties involved: ' || UNIQUE_COUNTERPARTIES || CHR(10) ||
+    '   • Elevated counterparty diversity suggests layering activity.' || CHR(10) ||
+
+    CHR(10) ||
+    '5. Risk Conclusion:' || CHR(10) ||
+    '   Based on transaction velocity, device anomalies, and counterparty spread, ' ||
+    'the account demonstrates characteristics consistent with potential money mule activity. ' ||
+    'Further investigation and regulatory reporting review is recommended.'
+
+    AS SAR_NARRATIVE
+
     FROM SAR_REPORTS
-    WHERE SAR_ID = '{selected_sar}'
+    WHERE SAR_ID = '{selected_sar}';
     """
 
     narrative_df = session.sql(narrative_query).to_pandas()
@@ -137,20 +164,22 @@ if not sar_df.empty:
         st.text_area(
             "Generated Narrative",
             narrative_df["SAR_NARRATIVE"].iloc[0],
-            height=150
+            height=300
         )
 
-# -----------------------------------
-# EXPORT CSV
-# -----------------------------------
-st.subheader("⬇ Export SAR Data")
+   
+    # EXPORT CSV
+    # -----------------------------------
+    st.subheader("⬇ Export SAR Data")
+    
+    if st.button("Export SAR CSV"):
+        sar_df.to_csv("/tmp/sar_export.csv", index=False)
+        with open("/tmp/sar_export.csv", "rb") as file:
+            st.download_button(
+                label="Download SAR CSV",
+                data=file,
+                file_name="sar_reports.csv",
+                mime="text/csv"
+            )
 
-if st.button("Export SAR CSV"):
-    sar_df.to_csv("/tmp/sar_export.csv", index=False)
-    with open("/tmp/sar_export.csv", "rb") as file:
-        st.download_button(
-            label="Download SAR CSV",
-            data=file,
-            file_name="sar_reports.csv",
-            mime="text/csv"
-        )
+   
