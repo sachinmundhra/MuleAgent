@@ -1,3 +1,15 @@
+delete from ACCOUNTS;
+
+delete from TRANSACTIONS;
+
+delete from FEATURE_STORE;
+
+delete from MULE_RISK_SCORES;
+
+delete from SAR_REPORTS;
+
+
+
 INSERT INTO ACCOUNTS
 SELECT
     'ACC' || LPAD(SEQ4(), 6, '0') AS ACCOUNT_ID,
