@@ -6,60 +6,54 @@ from snowflake.snowpark.functions import col , when_matched
  
 # Write directly to the app
 
-st.title(f"Mule Risk Score")
+st.title(f"Mule Risk Score Screen")
+#st.markdown(
+#    "<h1 style='text-align: center;'>Mule Risk Score</h1>",
+#    unsafe_allow_html=True
+#)
 
-st.write(
+st.markdown("<span style='color:red;text-align:center'>Risk Score < 0 - Account is MULE_SUSPECT </span>", unsafe_allow_html=True)
+st.markdown("<span style='color:blue;'>Risk Score > 0 - Account is NORMAL </span>", unsafe_allow_html=True)
 
-  """Details of Risk transactions of Greens Bank
+st.markdown("""
+    <style>
+    /* Data Editor Header Styling */
+    div[data-testid="stDataEditor"] thead tr th {
+        background-color: #006400 !important;   /* Header Background */
+        color: white !important;                /* Header Text Color */
+        font-size: 16px !important;             /* Header Font Size */
+        text-align: center !important;          /* Center Align */
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-  """
 
-)
- 
 session = get_active_session()
  
- 
-#my_dataframe = session.table("MULE_RISK_SCORES").select(col('ACCOUNT_ID'),col('RISK_SCORE'),col('RISK_LABEL')).distinct()
-#my_dataframe = session.table("MULE_RISK_SCORES").select(col('ACCOUNT_ID'),col('RISK_SCORE'),col('RISK_LABEL'),col('SCORE_TS'))
-
-#from snowflake.snowpark.functions import col
 
 my_dataframe = session.table("MULE_RISK_SCORES") \
-    .select(col("ACCOUNT_ID"), col("RISK_SCORE"), col("RISK_LABEL")) \
-    .sort(col("SCORE_TS").desc()) \
-    .limit(100) \
+    .select(col("ACCOUNT_ID"), col("RISK_SCORE"), col("RISK_LABEL"),col('SCORE_TS')) \
+    .sort(col("RISK_LABEL").asc()) \
+    .limit(5000) \
     #.show()
 
+#editable_df = st.data_editor(my_dataframe)
 
-editable_df = st.data_editor(my_dataframe)
- 
-if my_dataframe:
+df = my_dataframe.to_pandas()
 
-    refresh = st.button('Refresh')
+if df.empty:
+    st.success("✅ No HIGH risk mule accounts found.")
+    st.stop()
+    
+def highlight_rows(row):
+    if row["RISK_LABEL"] == "MULE_SUSPECT":
+        return ['background-color: #ffcccc'] * len(row)  # Light Red
+    elif row["RISK_LABEL"] == "NORMAL":
+        return ['background-color: #cce5ff'] * len(row)  # Light Green
+    else:
+        return [''] * len(row)
 
-    if refresh:
+styled_df = df.style.apply(highlight_rows, axis=1)
 
-        mrs_dataset = session.table("MULE_RISK_SCORES")
+st.dataframe(styled_df, use_container_width=True)
 
-        edited_dataset = session.create_dataframe(editable_df)
-
-        try:
-
-            mrs_dataset.merge(edited_dataset
-
-                             , (mrs_dataset['ACCOUNT_ID'] == edited_dataset['ACCOUNT_ID'])
-
-                             , [when_matched().update({'RISK_SCORE': edited_dataset['RISK_SCORE']})]
-
-                            )
-
-            st.success('Data Refreshed !',icon="👍")
-
-        except:
-
-            st.write('Something went wrong')
-
-else:
-
-    st.write('There are no more updated rows !',icon="👍")
-  
